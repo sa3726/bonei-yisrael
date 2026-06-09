@@ -137,3 +137,37 @@ create policy "Members can read replies" on forum_replies for select using (auth
 create policy "Members can post replies" on forum_replies for insert with check (auth.uid() = author_id);
 create policy "Authors can update replies" on forum_replies for update using (auth.uid() = author_id);
 create policy "Authors can delete replies" on forum_replies for delete using (auth.uid() = author_id);
+
+-- CHAT CHANNELS
+create table if not exists chat_channels (
+  id uuid default gen_random_uuid() primary key,
+  name text not null unique,
+  description text,
+  created_at timestamptz default now()
+);
+
+-- Seed default channels
+insert into chat_channels (name, description) values
+  ('general', 'General community chat'),
+  ('aliyah', 'Aliyah planning and tips'),
+  ('schools', 'Schools and education'),
+  ('housing', 'Housing and neighborhoods'),
+  ('matobu', 'Matobu project updates')
+on conflict (name) do nothing;
+
+-- CHAT MESSAGES
+create table if not exists chat_messages (
+  id uuid default gen_random_uuid() primary key,
+  channel_id uuid references chat_channels(id) on delete cascade,
+  author_id uuid references profiles(id) on delete cascade,
+  body text not null,
+  created_at timestamptz default now()
+);
+
+alter table chat_channels enable row level security;
+alter table chat_messages enable row level security;
+
+create policy "Members can read channels" on chat_channels for select using (auth.role() = 'authenticated');
+create policy "Members can read messages" on chat_messages for select using (auth.role() = 'authenticated');
+create policy "Members can send messages" on chat_messages for insert with check (auth.uid() = author_id);
+create policy "Authors can delete messages" on chat_messages for delete using (auth.uid() = author_id);
