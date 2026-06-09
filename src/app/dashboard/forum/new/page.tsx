@@ -17,64 +17,57 @@ export default function NewThreadPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setError('Not logged in'); setLoading(false); return }
-
     const { data, error } = await supabase.from('forum_threads').insert({
-      title: form.title,
-      category: form.category,
-      body: form.body,
-      author_id: user.id,
+      title: form.title, category: form.category, body: form.body, author_id: user.id,
     }).select().single()
-
     if (error) { setError(error.message); setLoading(false); return }
     router.push(`/dashboard/forum/${data.id}`)
   }
 
   return (
-    <div className="max-w-2xl">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/dashboard/forum" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-2xl font-bold text-blue-900">New Thread</h1>
-      </div>
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-5">
+    <div style={{ maxWidth: '680px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+        <Link href="/dashboard/forum" style={{ color: 'rgba(44,62,80,0.4)', textDecoration: 'none', fontSize: '1.25rem' }}>←</Link>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+          <p className="by-label" style={{ marginBottom: '0.2rem' }}>Forum</p>
+          <h1 style={{ fontSize: 'var(--by-heading)', fontWeight: 500 }}>New Thread</h1>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="by-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div>
+          <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Title</label>
           <input name="title" value={form.title} onChange={handleChange} required
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="What's on your mind?" />
+            className="by-input" placeholder="What's on your mind?" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-          <select name="category" value={form.category} onChange={handleChange}
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>General</option>
-            <option>Matobu</option>
-            <option>Bnei Rachel</option>
-            <option>Aliyah</option>
-            <option>Schools</option>
-            <option>Events</option>
+          <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Category</label>
+          <select name="category" value={form.category} onChange={handleChange} className="by-input">
+            {['General', 'Matobu', 'Bnei Rachel', 'Aliyah', 'Schools', 'Events'].map(c => (
+              <option key={c}>{c}</option>
+            ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Message</label>
           <textarea name="body" value={form.body} onChange={handleChange} required rows={10}
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="by-input" style={{ resize: 'none', fontFamily: 'inherit' }}
             placeholder="Share your thoughts, questions, or updates…" />
         </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <div className="flex gap-3 pt-2">
-          <button type="submit" disabled={loading}
-            className="rounded-full bg-blue-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 transition-colors disabled:opacity-50">
+        {error && (
+          <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.15)', borderRadius: '0.5rem', padding: '0.75rem 1rem' }}>
+            <p style={{ fontSize: 'var(--by-small)', color: '#dc2626' }}>{error}</p>
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem' }}>
+          <button type="submit" className="by-btn-primary" disabled={loading} style={{ opacity: loading ? 0.6 : 1 }}>
             {loading ? 'Posting…' : 'Post Thread'}
           </button>
-          <Link href="/dashboard/forum"
-            className="rounded-full border border-gray-200 px-6 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-            Cancel
-          </Link>
+          <Link href="/dashboard/forum" className="by-btn-outline">Cancel</Link>
         </div>
       </form>
     </div>

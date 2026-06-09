@@ -11,72 +11,62 @@ const mockAnnouncements = [
   { id: 5, title: 'Tu Bishvat Issue #1 Newsletter', type: 'Newsletter', date: '2026-02-01', recipients: 85, status: 'Sent' },
 ]
 
-const typeColors: Record<string, string> = {
-  Newsletter: 'bg-purple-100 text-purple-700',
-  Announcement: 'bg-blue-100 text-blue-700',
-}
-
 export default function CommunicationsPage() {
   const [filter, setFilter] = useState('All')
-
   const filtered = filter === 'All' ? mockAnnouncements : mockAnnouncements.filter(a => a.type === filter || a.status === filter)
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-2xl font-bold text-blue-900">Communications</h1>
-          <p className="text-gray-500 text-sm">Newsletters & announcements</p>
+          <p className="by-label" style={{ marginBottom: '0.5rem' }}>Outreach</p>
+          <h1 style={{ fontSize: 'var(--by-hero)', fontWeight: 300, letterSpacing: '-0.015em' }}>Communications</h1>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginTop: '0.25rem', fontWeight: 300 }}>Newsletters & announcements</p>
         </div>
-        <Link
-          href="/dashboard/communications/new"
-          className="rounded-full bg-blue-900 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors"
-        >
-          + New Message
-        </Link>
+        <Link href="/dashboard/communications/new" className="by-btn-primary">+ New Message</Link>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {['All', 'Newsletter', 'Announcement', 'Draft'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === f ? 'bg-blue-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300'
-            }`}>
+            style={{
+              padding: '0.4rem 1rem', borderRadius: '9999px', fontSize: 'var(--by-small)', fontWeight: 500, cursor: 'pointer', border: 'none',
+              background: filter === f ? 'var(--by-primary)' : 'white',
+              color: filter === f ? 'white' : 'rgba(44,62,80,0.6)',
+              boxShadow: filter === f ? 'none' : '0 0 0 1px rgba(44,62,80,0.12)',
+            }}>
             {f}
           </button>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Title</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Type</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Date</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Recipients</th>
-              <th className="text-left px-6 py-3 font-medium text-gray-500">Status</th>
-              <th className="px-6 py-3"></th>
+      <div className="by-card" style={{ overflow: 'hidden', padding: 0 }}>
+        <table style={{ width: '100%', fontSize: 'var(--by-small)', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ background: 'var(--by-gray)', borderBottom: '1px solid rgba(44,62,80,0.06)' }}>
+              {['Title', 'Type', 'Date', 'Recipients', 'Status', ''].map((h, i) => (
+                <th key={i} className="by-label" style={{ textAlign: 'left', padding: '0.75rem 1.5rem' }}>{h}</th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
-            {filtered.map(a => (
-              <tr key={a.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{a.title}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${typeColors[a.type]}`}>{a.type}</span>
+          <tbody>
+            {filtered.map((a, i) => (
+              <tr key={a.id} style={{ borderTop: i > 0 ? '1px solid rgba(44,62,80,0.05)' : 'none' }}>
+                <td style={{ padding: '1rem 1.5rem', fontWeight: 500 }}>{a.title}</td>
+                <td style={{ padding: '1rem 1.5rem' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(44,62,80,0.15)', borderRadius: '9999px', padding: '0.2rem 0.6rem', color: 'var(--by-primary-light)' }}>
+                    {a.type}
+                  </span>
                 </td>
-                <td className="px-6 py-4 text-gray-500">{a.date}</td>
-                <td className="px-6 py-4 text-gray-600">{a.recipients > 0 ? a.recipients : '—'}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                    a.status === 'Sent' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}>
+                <td style={{ padding: '1rem 1.5rem', color: 'rgba(44,62,80,0.5)', fontWeight: 300 }}>{a.date}</td>
+                <td style={{ padding: '1rem 1.5rem', color: 'rgba(44,62,80,0.6)', fontWeight: 300 }}>{a.recipients > 0 ? a.recipients : '—'}</td>
+                <td style={{ padding: '1rem 1.5rem' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(44,62,80,0.15)', borderRadius: '9999px', padding: '0.2rem 0.6rem', color: a.status === 'Sent' ? 'var(--by-primary)' : 'rgba(44,62,80,0.5)' }}>
                     {a.status}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <button className="text-blue-600 hover:text-blue-800 text-xs font-medium">
+                <td style={{ padding: '1rem 1.5rem' }}>
+                  <button style={{ fontSize: 'var(--by-small)', color: 'var(--by-primary-light)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>
                     {a.status === 'Draft' ? 'Edit' : 'View'}
                   </button>
                 </td>

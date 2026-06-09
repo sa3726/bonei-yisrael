@@ -18,24 +18,19 @@ export default function ThreadPage() {
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-
       const { data: t } = await supabase
         .from('forum_threads')
         .select('*, author:profiles(full_name, first_name, last_name)')
-        .eq('id', id)
-        .single()
+        .eq('id', id).single()
       setThread(t)
-
       const { data: r } = await supabase
         .from('forum_replies')
         .select('*, author:profiles(full_name, first_name, last_name)')
-        .eq('thread_id', id)
-        .order('created_at', { ascending: true })
+        .eq('thread_id', id).order('created_at', { ascending: true })
       setReplies(r ?? [])
     }
     load()
 
-    // Realtime subscription for new replies
     const channel = supabase
       .channel(`thread-${id}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'forum_replies', filter: `thread_id=eq.${id}` },
@@ -43,8 +38,7 @@ export default function ThreadPage() {
           const { data } = await supabase
             .from('forum_replies')
             .select('*, author:profiles(full_name, first_name, last_name)')
-            .eq('id', payload.new.id)
-            .single()
+            .eq('id', payload.new.id).single()
           if (data) setReplies(r => [...r, data])
         })
       .subscribe()
@@ -56,81 +50,86 @@ export default function ThreadPage() {
     e.preventDefault()
     if (!reply.trim() || !user) return
     setSubmitting(true)
-    await supabase.from('forum_replies').insert({
-      thread_id: id,
-      body: reply,
-      author_id: user.id,
-    })
+    await supabase.from('forum_replies').insert({ thread_id: id, body: reply, author_id: user.id })
     setReply('')
     setSubmitting(false)
   }
 
-  function getName(profile: any) {
-    return profile?.full_name || `${profile?.first_name ?? ''} ${profile?.last_name ?? ''}`.trim() || 'Member'
+  function getName(p: any) {
+    return p?.full_name || `${p?.first_name ?? ''} ${p?.last_name ?? ''}`.trim() || 'Member'
   }
-
   function getInitials(name: string) {
     return name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
   }
 
-  if (!thread) return <div className="text-gray-400 p-8">Loading…</div>
+  if (!thread) return (
+    <div style={{ padding: '3rem', color: 'rgba(44,62,80,0.4)', fontSize: 'var(--by-small)', fontWeight: 300 }}>Loading…</div>
+  )
 
   const authorName = getName(thread.author)
 
   return (
-    <div className="max-w-3xl">
-      <Link href="/dashboard/forum" className="text-gray-400 hover:text-gray-600 text-sm mb-6 inline-block">← Back to Forum</Link>
+    <div style={{ maxWidth: '720px' }}>
+      <Link href="/dashboard/forum" style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.4)', textDecoration: 'none', display: 'inline-block', marginBottom: '1.5rem', fontWeight: 300 }}>
+        ← Back to Forum
+      </Link>
 
       {/* Thread */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-4">
-        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 mb-3 inline-block">{thread.category}</span>
-        <h1 className="text-xl font-bold text-blue-900 mb-4">{thread.title}</h1>
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">
+      <div className="by-card" style={{ padding: '2rem', marginBottom: '1rem' }}>
+        <span style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(44,62,80,0.15)', borderRadius: '9999px', padding: '0.2rem 0.6rem', color: 'var(--by-primary-light)', display: 'inline-block', marginBottom: '1rem' }}>
+          {thread.category}
+        </span>
+        <h1 style={{ fontSize: 'var(--by-subheading)', fontWeight: 500, marginBottom: '1.25rem' }}>{thread.title}</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ width: '2.25rem', height: '2.25rem', borderRadius: '9999px', background: 'var(--by-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 500, flexShrink: 0 }}>
             {getInitials(authorName)}
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-800">{authorName}</p>
-            <p className="text-xs text-gray-400">{new Date(thread.created_at).toLocaleDateString()}</p>
+            <p style={{ fontSize: 'var(--by-small)', fontWeight: 500 }}>{authorName}</p>
+            <p style={{ fontSize: '0.75rem', color: 'rgba(44,62,80,0.4)', fontWeight: 300 }}>{new Date(thread.created_at).toLocaleDateString()}</p>
           </div>
         </div>
-        <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line border-t border-gray-50 pt-5">
+        <div style={{ fontSize: 'var(--by-body)', color: 'rgba(44,62,80,0.75)', lineHeight: 1.7, whiteSpace: 'pre-line', borderTop: '1px solid rgba(44,62,80,0.06)', paddingTop: '1.25rem', fontWeight: 300 }}>
           {thread.body}
         </div>
       </div>
 
       {/* Replies */}
-      <div className="flex flex-col gap-3 mb-6">
-        {replies.length > 0 && <p className="text-sm font-semibold text-gray-500">{replies.length} {replies.length === 1 ? 'reply' : 'replies'}</p>}
+      {replies.length > 0 && (
+        <p style={{ fontSize: 'var(--by-small)', fontWeight: 500, marginBottom: '0.75rem', color: 'rgba(44,62,80,0.5)' }}>
+          {replies.length} {replies.length === 1 ? 'reply' : 'replies'}
+        </p>
+      )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
         {replies.map(r => {
           const rName = getName(r.author)
           return (
-            <div key={r.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-700 font-bold text-xs">
+            <div key={r.id} className="by-card" style={{ padding: '1.25rem 1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                <div style={{ width: '2rem', height: '2rem', borderRadius: '9999px', background: 'var(--by-gray)', color: 'var(--by-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 500, flexShrink: 0 }}>
                   {getInitials(rName)}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">{rName}</p>
-                  <p className="text-xs text-gray-400">{new Date(r.created_at).toLocaleString()}</p>
+                  <p style={{ fontSize: 'var(--by-small)', fontWeight: 500 }}>{rName}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'rgba(44,62,80,0.4)', fontWeight: 300 }}>{new Date(r.created_at).toLocaleString()}</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{r.body}</p>
+              <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.7)', lineHeight: 1.6, whiteSpace: 'pre-line', fontWeight: 300 }}>{r.body}</p>
             </div>
           )
         })}
       </div>
 
       {/* Reply box */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-        <p className="text-sm font-semibold text-gray-700 mb-3">Write a reply</p>
-        <form onSubmit={handleReply} className="flex flex-col gap-3">
+      <div className="by-card" style={{ padding: '1.5rem' }}>
+        <p style={{ fontSize: 'var(--by-small)', fontWeight: 500, marginBottom: '1rem' }}>Write a reply</p>
+        <form onSubmit={handleReply} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <textarea value={reply} onChange={e => setReply(e.target.value)} rows={4}
             placeholder="Share your thoughts…"
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
-          <div className="flex justify-end">
-            <button type="submit" disabled={submitting || !reply.trim()}
-              className="rounded-full bg-blue-900 px-6 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors disabled:opacity-50">
+            className="by-input" style={{ resize: 'none', fontFamily: 'inherit' }} />
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button type="submit" className="by-btn-primary" disabled={submitting || !reply.trim()}
+              style={{ opacity: submitting || !reply.trim() ? 0.5 : 1 }}>
               {submitting ? 'Posting…' : 'Post Reply'}
             </button>
           </div>

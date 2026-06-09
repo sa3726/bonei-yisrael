@@ -13,63 +13,62 @@ const mockEvents = [
 
 export default function EventsPage() {
   const [filter, setFilter] = useState('Upcoming')
-
   const filtered = filter === 'All' ? mockEvents : mockEvents.filter(e => e.status === filter)
+  const upcoming = mockEvents.filter(e => e.status === 'Upcoming').length
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-2xl font-bold text-blue-900">Events</h1>
-          <p className="text-gray-500 text-sm">{mockEvents.filter(e => e.status === 'Upcoming').length} upcoming events</p>
+          <p className="by-label" style={{ marginBottom: '0.5rem' }}>Calendar</p>
+          <h1 style={{ fontSize: 'var(--by-hero)', fontWeight: 300, letterSpacing: '-0.015em' }}>Events</h1>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginTop: '0.25rem', fontWeight: 300 }}>{upcoming} upcoming</p>
         </div>
-        <Link
-          href="/dashboard/events/new"
-          className="rounded-full bg-blue-900 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors"
-        >
-          + Create Event
-        </Link>
+        <Link href="/dashboard/events/new" className="by-btn-primary">+ Create Event</Link>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      {/* Filter tabs */}
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.5rem' }}>
         {['Upcoming', 'Past', 'All'].map(f => (
           <button key={f} onClick={() => setFilter(f)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              filter === f ? 'bg-blue-900 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300'
-            }`}>
+            style={{
+              padding: '0.4rem 1.1rem', borderRadius: '9999px', fontSize: 'var(--by-small)', fontWeight: 500, cursor: 'pointer', border: 'none',
+              background: filter === f ? 'var(--by-primary)' : 'white',
+              color: filter === f ? 'white' : 'rgba(44,62,80,0.6)',
+              boxShadow: filter === f ? 'none' : '0 0 0 1px rgba(44,62,80,0.12)',
+              transition: 'all 0.2s',
+            }}>
             {f}
           </button>
         ))}
       </div>
 
-      <div className="grid gap-4">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {filtered.map(ev => (
-          <div key={ev.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-5">
-              <div className="text-center bg-blue-50 rounded-xl px-4 py-3 min-w-16">
-                <div className="text-xs text-blue-600 font-medium uppercase">
+          <div key={ev.id} className="by-card" style={{ padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+              <div style={{ textAlign: 'center', background: 'var(--by-gray)', borderRadius: '0.75rem', padding: '0.5rem 1rem', minWidth: '3.5rem' }}>
+                <div style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--by-primary-light)' }}>
                   {new Date(ev.date).toLocaleDateString('en-US', { month: 'short' })}
                 </div>
-                <div className="text-2xl font-bold text-blue-900">
+                <div style={{ fontSize: 'var(--by-heading)', fontWeight: 500, color: 'var(--by-primary)', lineHeight: 1.1 }}>
                   {new Date(ev.date).getDate()}
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">{ev.title}</h3>
-                <p className="text-sm text-gray-500">{ev.time} · {ev.location}</p>
+                <h3 style={{ fontSize: 'var(--by-body)', fontWeight: 500 }}>{ev.title}</h3>
+                <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.5)', marginTop: '0.2rem', fontWeight: 300 }}>{ev.time} · {ev.location}</p>
               </div>
             </div>
-            <div className="flex items-center gap-6 shrink-0">
-              <div className="text-center">
-                <div className="font-bold text-blue-900">{ev.attendees}</div>
-                <div className="text-xs text-gray-400">Registered</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexShrink: 0 }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 'var(--by-body)', fontWeight: 500 }}>{ev.attendees}</div>
+                <div style={{ fontSize: '0.7rem', color: 'rgba(44,62,80,0.4)', fontWeight: 300 }}>Registered</div>
               </div>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                ev.status === 'Upcoming' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
-              }`}>
+              <span style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', border: '1px solid rgba(44,62,80,0.15)', borderRadius: '9999px', padding: '0.2rem 0.7rem', color: ev.status === 'Upcoming' ? 'var(--by-primary)' : 'rgba(44,62,80,0.4)' }}>
                 {ev.status}
               </span>
-              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button>
+              <button style={{ fontSize: 'var(--by-small)', color: 'var(--by-primary-light)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>Edit</button>
             </div>
           </div>
         ))}

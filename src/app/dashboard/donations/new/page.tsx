@@ -18,79 +18,70 @@ export default function NewDonationPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // TODO: save to Supabase
     router.push('/dashboard/donations')
   }
 
   return (
-    <div className="max-w-2xl">
-      <div className="flex items-center gap-3 mb-6">
-        <Link href="/dashboard/donations" className="text-gray-400 hover:text-gray-600">←</Link>
-        <h1 className="text-2xl font-bold text-blue-900">Record Donation</h1>
+    <div style={{ maxWidth: '680px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+        <Link href="/dashboard/donations" style={{ color: 'rgba(44,62,80,0.4)', textDecoration: 'none', fontSize: '1.25rem' }}>←</Link>
+        <div>
+          <p className="by-label" style={{ marginBottom: '0.2rem' }}>Finance</p>
+          <h1 style={{ fontSize: 'var(--by-heading)', fontWeight: 500 }}>Record Donation</h1>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-6">
-        <div className="grid grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit} className="by-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Donor Name</label>
+            <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Donor Name</label>
             <input name="donor" value={form.donor} onChange={handleChange} required={!form.anonymous}
-              disabled={!!form.anonymous}
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400" />
+              disabled={!!form.anonymous} className="by-input"
+              style={{ opacity: form.anonymous ? 0.5 : 1 }} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Donor Email</label>
+            <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Donor Email</label>
             <input name="email" type="email" value={form.email} onChange={handleChange}
-              disabled={!!form.anonymous}
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-400" />
+              disabled={!!form.anonymous} className="by-input"
+              style={{ opacity: form.anonymous ? 0.5 : 1 }} />
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-          <input type="checkbox" name="anonymous" checked={!!form.anonymous} onChange={handleChange}
-            className="rounded border-gray-300" />
+        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.6)', cursor: 'pointer', fontWeight: 300 }}>
+          <input type="checkbox" name="anonymous" checked={!!form.anonymous} onChange={handleChange} />
           Anonymous donation
         </label>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount ($)</label>
+            <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Amount ($)</label>
             <input name="amount" type="number" min="1" value={form.amount} onChange={handleChange} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="0.00" />
+              className="by-input" placeholder="0.00" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Campaign</label>
-            <select name="campaign" value={form.campaign} onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option>General Fund</option>
-              <option>Schools Initiative</option>
-              <option>Shul Building</option>
-              <option>Safety & Security</option>
+            <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Campaign</label>
+            <select name="campaign" value={form.campaign} onChange={handleChange} className="by-input">
+              {['General Fund', 'Schools Initiative', 'Shul Building', 'Safety & Security'].map(c => (
+                <option key={c}>{c}</option>
+              ))}
             </select>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-          <input name="date" type="date" value={form.date} onChange={handleChange} required
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Date</label>
+          <input name="date" type="date" value={form.date} onChange={handleChange} required className="by-input" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+          <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Notes</label>
           <textarea name="notes" value={form.notes} onChange={handleChange} rows={3}
-            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+            className="by-input" style={{ resize: 'none', fontFamily: 'inherit' }} />
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <button type="submit"
-            className="rounded-full bg-blue-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 transition-colors">
-            Save Donation
-          </button>
-          <Link href="/dashboard/donations"
-            className="rounded-full border border-gray-200 px-6 py-2.5 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-            Cancel
-          </Link>
+        <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem' }}>
+          <button type="submit" className="by-btn-primary">Save Donation</button>
+          <Link href="/dashboard/donations" className="by-btn-outline">Cancel</Link>
         </div>
       </form>
     </div>
