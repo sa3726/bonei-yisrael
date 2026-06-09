@@ -12,24 +12,27 @@ export default async function ChatPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-blue-900">Community Chat</h1>
-        <p className="text-gray-500 text-sm">Real-time messaging with fellow members</p>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <p className="by-label" style={{ marginBottom: '0.5rem' }}>Community</p>
+        <h1 style={{ fontSize: 'var(--by-hero)', fontWeight: 300, letterSpacing: '-0.015em' }}>Chat</h1>
+        <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginTop: '0.25rem', fontWeight: 300 }}>Real-time messaging with fellow members</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {all.map((ch: any) => (
-          <Link key={ch.id} href={`/dashboard/chat/${ch.id}`}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:border-blue-200 hover:shadow-md transition-all">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">#</span>
-              <h3 className="font-semibold text-gray-900">{ch.name}</h3>
+          <Link key={ch.id} href={`/dashboard/chat/${ch.id}`} className="by-card" style={{ padding: '1.5rem', textDecoration: 'none', display: 'block' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              <span style={{ fontSize: '1rem', fontWeight: 500, color: 'rgba(44,62,80,0.35)' }}>#</span>
+              <h3 style={{ fontSize: 'var(--by-body)', fontWeight: 500 }}>{ch.name}</h3>
             </div>
-            <p className="text-sm text-gray-500">{ch.description}</p>
+            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.5)', fontWeight: 300 }}>{ch.description}</p>
           </Link>
         ))}
         {all.length === 0 && (
-          <p className="text-gray-400 col-span-3 text-center py-12">No channels found. Run the SQL schema to create them.</p>
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem 0' }}>
+            <p style={{ fontSize: 'var(--by-body)', color: 'rgba(44,62,80,0.35)', fontWeight: 300 }}>No channels yet.</p>
+            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.25)', marginTop: '0.5rem', fontWeight: 300 }}>Run the database schema in Supabase to create channels.</p>
+          </div>
         )}
       </div>
     </div>

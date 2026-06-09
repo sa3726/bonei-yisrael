@@ -22,51 +22,48 @@ export default async function ForumPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 className="text-2xl font-bold text-blue-900">Community Forum</h1>
-          <p className="text-gray-500 text-sm">Discussions, updates & questions</p>
+          <p className="by-label" style={{ marginBottom: '0.5rem' }}>Community</p>
+          <h1 style={{ fontSize: 'var(--by-hero)', fontWeight: 300, letterSpacing: '-0.015em' }}>Forum</h1>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginTop: '0.25rem', fontWeight: 300 }}>Discussions, updates & questions</p>
         </div>
-        <Link href="/dashboard/forum/new"
-          className="rounded-full bg-blue-900 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors">
-          + New Thread
-        </Link>
+        <Link href="/dashboard/forum/new" className="by-btn-primary">+ New Thread</Link>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
         {all.map((t: any) => {
           const name = t.author?.full_name || `${t.author?.first_name ?? ''} ${t.author?.last_name ?? ''}`.trim() || 'Member'
           const initials = name.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
           const replyCount = t.replies?.[0]?.count ?? 0
           return (
-            <Link key={t.id} href={`/dashboard/forum/${t.id}`}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-5 hover:border-blue-200 hover:shadow-md transition-all">
-              <div className="hidden sm:flex w-10 h-10 rounded-full bg-blue-100 items-center justify-center text-blue-700 font-bold text-sm shrink-0">
+            <Link key={t.id} href={`/dashboard/forum/${t.id}`} className="by-card"
+              style={{ padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem', textDecoration: 'none' }}>
+              <div style={{ width: '2.25rem', height: '2.25rem', borderRadius: '9999px', background: 'var(--by-primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', fontWeight: 500, flexShrink: 0 }}>
                 {initials}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryColors[t.category] ?? 'bg-gray-100 text-gray-600'}`}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--by-primary-light)', border: '1px solid rgba(44,62,80,0.15)', borderRadius: '9999px', padding: '0.15rem 0.6rem' }}>
                     {t.category}
                   </span>
-                  {t.pinned && <span className="text-xs text-gray-400">📌 Pinned</span>}
+                  {t.pinned && <span style={{ fontSize: '0.7rem', color: 'rgba(44,62,80,0.4)' }}>📌 Pinned</span>}
                 </div>
-                <h3 className="font-semibold text-gray-900 truncate">{t.title}</h3>
-                <p className="text-xs text-gray-400 mt-1">Posted by {name} · {new Date(t.created_at).toLocaleDateString()}</p>
+                <h3 style={{ fontSize: 'var(--by-body)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.title}</h3>
+                <p style={{ fontSize: '0.75rem', color: 'rgba(44,62,80,0.4)', marginTop: '0.2rem', fontWeight: 300 }}>
+                  {name} · {new Date(t.created_at).toLocaleDateString()}
+                </p>
               </div>
-              <div className="hidden md:flex items-center gap-4 shrink-0 text-sm text-gray-500">
-                <span>💬 {replyCount}</span>
+              <div style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.4)', flexShrink: 0, fontWeight: 300 }}>
+                💬 {replyCount}
               </div>
             </Link>
           )
         })}
         {all.length === 0 && (
-          <div className="text-center py-16 bg-white rounded-2xl border border-gray-100">
-            <p className="text-gray-400 mb-4">No threads yet. Start the conversation!</p>
-            <Link href="/dashboard/forum/new"
-              className="rounded-full bg-blue-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 transition-colors">
-              Create First Thread
-            </Link>
+          <div className="by-card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+            <p style={{ fontSize: 'var(--by-body)', color: 'rgba(44,62,80,0.4)', marginBottom: '1.25rem', fontWeight: 300 }}>No threads yet. Start the conversation!</p>
+            <Link href="/dashboard/forum/new" className="by-btn-primary">Create First Thread</Link>
           </div>
         )}
       </div>

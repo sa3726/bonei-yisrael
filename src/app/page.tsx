@@ -13,15 +13,13 @@ const projects = [
     name: "Matobu",
     location: "Katamonim, Jerusalem",
     flag: "🏙️",
-    desc: "A comprehensive community environment in the heart of Yerushalayim — homes, schools, shuls, and the infrastructure to sustain them. Designed specifically for Syrian Jewish families who want to build the future.",
-    tag: "Active Development",
+    desc: "A comprehensive community environment in the heart of Yerushalayim — homes, schools, shuls, and the infrastructure to sustain them. Designed for Syrian Jewish families who want to build the future.",
   },
   {
     name: "Bnei Rachel",
     location: "Bethlehem · Next to Kever Rachel",
     flag: "🕊️",
     desc: "The only Jewish presence in Beit Lechem, strengthening connection to this holy site through Torah learning, community programs, and expansion of the yeshiva campus.",
-    tag: "Active Development",
   },
 ];
 
@@ -37,137 +35,141 @@ const team = [
   { name: "Zachary (Isaac) Levi", role: "PR & Communications" },
 ];
 
-const bonot = [
-  { name: "Sophia Shabot" },
-  { name: "Marsha Zakay" },
-  { name: "Hannah Elmekias" },
-  { name: "Roz Levy" },
-];
+const bonot = ["Sophia Shabot", "Marsha Zakay", "Hannah Elmekias", "Roz Levy"];
 
 export default function Home() {
   return (
-    <div className="min-h-screen" style={{ background: '#F7F5F3', color: '#2C3E50' }}>
+    <div style={{ background: "var(--by-sand)", color: "var(--by-primary)", fontFamily: "var(--font-inter), Inter, system-ui, sans-serif" }}>
 
-      {/* Nav */}
-      <nav style={{ background: '#2C3E50' }} className="flex items-center justify-between px-8 py-4">
-        <div>
-          <span className="text-xl font-medium text-white tracking-wide">Bonei Yisrael</span>
-          <span className="ml-3 text-base" style={{ color: '#C9A84C' }}>בוני ישראל</span>
+      {/* ── Nav ── */}
+      <nav style={{ background: "var(--by-primary)" }} className="flex items-center justify-between px-8 py-5">
+        <div className="flex items-center gap-3">
+          <span style={{ fontSize: "var(--by-subheading)", fontWeight: 300, color: "white", letterSpacing: "-0.01em" }}>Bonei Yisrael</span>
+          <span style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.4)" }}>בוני ישראל</span>
         </div>
         <div className="flex items-center gap-6">
-          <a href="#projects" className="text-sm text-white/70 hover:text-white transition-colors hidden sm:block">Projects</a>
-          <a href="#team" className="text-sm text-white/70 hover:text-white transition-colors hidden sm:block">Team</a>
-          <Link href="/signup"
-            className="rounded-full px-5 py-2 text-sm font-medium transition-colors"
-            style={{ background: '#C9A84C', color: '#2C3E50' }}>
-            Join Us
-          </Link>
-          <Link href="/login"
-            className="rounded-full px-5 py-2 text-sm font-medium border border-white/30 text-white hover:bg-white/10 transition-colors">
-            Sign In
-          </Link>
+          {["#projects", "#team"].map((href, i) => (
+            <a key={href} href={href} style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.5)", transition: "var(--by-transition)" }}
+              className="hidden sm:block hover:text-white">{["Projects", "Team"][i]}</a>
+          ))}
+          <Link href="/signup" className="by-btn-primary" style={{ background: "white", color: "var(--by-primary)", fontSize: "var(--by-small)" }}>Join Us</Link>
+          <Link href="/login" style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.6)", transition: "var(--by-transition)" }}
+            className="hover:text-white">Sign In</Link>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section style={{ background: '#2C3E50' }} className="flex flex-col items-center justify-center px-8 py-28 text-center text-white">
-        <p className="text-xs font-medium uppercase tracking-[0.25em] mb-6" style={{ color: '#C9A84C' }}>
-          Home · Heritage · Future
-        </p>
-        <h1 className="text-4xl sm:text-5xl font-light max-w-2xl leading-tight mb-6 tracking-tight">
+      {/* ── Hero ── */}
+      <section style={{ background: "var(--by-primary)", paddingTop: "7rem", paddingBottom: "7rem" }}
+        className="flex flex-col items-center text-center px-8">
+        <p className="by-label mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>Home · Heritage · Future</p>
+        <h1 className="by-display" style={{ color: "white", maxWidth: "640px", lineHeight: 1.1 }}>
           Building the Future.<br />In Our Land. Together.
         </h1>
-        <p className="text-base text-white/70 max-w-lg mb-5 leading-relaxed font-light">
-          Bonei Yisrael is a Syrian Jewish-led movement dedicated to establishing vibrant, permanent communities in Eretz Yisrael — rooted in Torah, built for generations.
+        <p className="by-body" style={{ color: "rgba(255,255,255,0.55)", maxWidth: "480px", marginTop: "1.5rem", fontWeight: 300 }}>
+          A Syrian Jewish-led movement establishing vibrant, permanent communities in Eretz Yisrael — rooted in Torah, built for generations.
         </p>
-        <p className="text-sm mb-12 italic" style={{ color: '#C9A84C' }}>
+        <p style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.3)", marginTop: "1rem", fontStyle: "italic" }}>
           "בונה ירושלים ה׳ נדחי ישראל יכנס"
         </p>
-        <div className="flex gap-4 flex-wrap justify-center">
-          <Link href="/signup"
-            className="rounded-full px-8 py-3 text-sm font-medium transition-colors"
-            style={{ background: '#C9A84C', color: '#2C3E50' }}>
+        <div className="flex gap-3 mt-10 flex-wrap justify-center">
+          <Link href="/signup" className="by-btn-primary" style={{ background: "white", color: "var(--by-primary)" }}>
             Join the Movement
           </Link>
-          <a href="#story"
-            className="rounded-full px-8 py-3 text-sm font-medium border border-white/30 text-white hover:bg-white/10 transition-colors">
+          <a href="#story" className="by-btn-outline" style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.7)" }}>
             Our Story
           </a>
         </div>
       </section>
 
-      {/* Story */}
-      <section id="story" className="px-8 py-24 max-w-2xl mx-auto text-center">
-        <p className="text-xs font-medium uppercase tracking-widest mb-4" style={{ color: '#C9A84C' }}>How It Started</p>
-        <h2 className="text-2xl font-light mb-8" style={{ color: '#2C3E50' }}>Born in a Garage, Purim 2023</h2>
-        <p className="text-gray-600 leading-relaxed mb-4 font-light">
-          Saul Ancona and Michael Kraiem were sitting together studying Torah. There was no agenda — no whiteboard, no planning document. Eretz Yisrael surfaced naturally, as it always does when the conversation is serious enough.
-        </p>
-        <p className="text-gray-600 leading-relaxed mb-4 font-light">
-          The question that followed was not emotional, and it was not rhetorical: <em>Where is the community actually going?</em> What came next was commitment — a shared decision to build rather than admire.
-        </p>
-        <p className="text-gray-600 leading-relaxed font-light">
-          This is not about inspiration. It is about infrastructure. Turning conviction into a concrete plan.
-        </p>
+      {/* ── Story ── */}
+      <section id="story" className="flex flex-col items-center text-center px-8" style={{ padding: "6rem 2rem" }}>
+        <p className="by-label mb-4">How It Started</p>
+        <h2 className="by-hero" style={{ maxWidth: "560px" }}>Born in a Garage, Purim 2023</h2>
+        <div style={{ maxWidth: "560px", marginTop: "2rem" }}>
+          <p className="by-body" style={{ color: "rgba(44,62,80,0.6)", fontWeight: 300, marginBottom: "1rem" }}>
+            Saul Ancona and Michael Kraiem were sitting together studying Torah. There was no agenda — no whiteboard, no planning document. Eretz Yisrael surfaced naturally, as it always does when the conversation is serious enough.
+          </p>
+          <p className="by-body" style={{ color: "rgba(44,62,80,0.6)", fontWeight: 300, marginBottom: "1rem" }}>
+            The question that followed was not emotional, and not rhetorical: <em>Where is the community actually going?</em> What came next was commitment — a shared decision to build rather than admire.
+          </p>
+          <p className="by-body" style={{ color: "rgba(44,62,80,0.6)", fontWeight: 300 }}>
+            This is not about inspiration. It is about infrastructure. Turning conviction into a concrete plan.
+          </p>
+        </div>
       </section>
 
-      {/* Pillars */}
-      <section style={{ background: '#F8F9FA' }} className="px-8 py-20">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-medium uppercase tracking-widest text-center mb-3" style={{ color: '#C9A84C' }}>What We Build</p>
-          <h2 className="text-2xl font-light text-center mb-12" style={{ color: '#2C3E50' }}>Five Pillars</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {pillars.map((p) => (
-              <div key={p.title} className="flex flex-col items-center text-center p-6 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <span className="text-3xl mb-3">{p.icon}</span>
-                <h3 className="font-medium text-base mb-1" style={{ color: '#2C3E50' }}>{p.title}</h3>
-                <p className="text-sm mb-2" style={{ color: '#C9A84C' }}>{p.hebrew}</p>
-                <p className="text-gray-400 text-xs">{p.desc}</p>
+      <hr className="by-divider" style={{ margin: 0 }} />
+
+      {/* ── Five Pillars ── */}
+      <section style={{ background: "var(--by-gray)", padding: "6rem 2rem" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          <p className="by-label mb-4 text-center">What We Build</p>
+          <h2 className="by-hero text-center" style={{ marginBottom: "3rem" }}>Five Pillars</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {pillars.map(p => (
+              <div key={p.title} className="by-card flex flex-col items-center text-center p-6">
+                <span style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>{p.icon}</span>
+                <h3 className="by-heading" style={{ fontSize: "var(--by-body)", fontWeight: 500 }}>{p.title}</h3>
+                <p style={{ fontSize: "var(--by-small)", color: "var(--by-primary-light)", marginTop: "0.25rem" }}>{p.hebrew}</p>
+                <p style={{ fontSize: "var(--by-small)", color: "rgba(44,62,80,0.45)", marginTop: "0.5rem", fontWeight: 300 }}>{p.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Projects */}
-      <section id="projects" className="px-8 py-20 max-w-5xl mx-auto">
-        <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: '#C9A84C' }}>On the Ground</p>
-        <h2 className="text-2xl font-light mb-10" style={{ color: '#2C3E50' }}>Our Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map(p => (
-            <div key={p.name} className="rounded-xl bg-white border border-gray-100 shadow-sm p-8 hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-4">{p.flag}</div>
-              <div className="flex items-center gap-3 mb-1">
-                <h3 className="text-lg font-medium" style={{ color: '#2C3E50' }}>{p.name}</h3>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-medium text-white" style={{ background: '#34495E' }}>{p.tag}</span>
+      {/* ── Projects ── */}
+      <section id="projects" style={{ padding: "6rem 2rem" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          <p className="by-label mb-4">On the Ground</p>
+          <h2 className="by-hero" style={{ marginBottom: "2.5rem" }}>Our Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {projects.map(p => (
+              <div key={p.name} className="by-card p-8">
+                <span style={{ fontSize: "2.25rem", display: "block", marginBottom: "1.25rem" }}>{p.flag}</span>
+                <div className="flex items-center gap-3 mb-1">
+                  <h3 style={{ fontSize: "var(--by-subheading)", fontWeight: 500 }}>{p.name}</h3>
+                  <span style={{ fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(44,62,80,0.4)", border: "1px solid rgba(44,62,80,0.15)", borderRadius: "9999px", padding: "0.2rem 0.6rem" }}>
+                    Active
+                  </span>
+                </div>
+                <p style={{ fontSize: "var(--by-small)", color: "rgba(44,62,80,0.45)", marginBottom: "1rem" }}>{p.location}</p>
+                <p className="by-body" style={{ color: "rgba(44,62,80,0.6)", fontWeight: 300 }}>{p.desc}</p>
               </div>
-              <p className="text-sm mb-4" style={{ color: '#C9A84C' }}>{p.location}</p>
-              <p className="text-gray-500 leading-relaxed text-sm font-light">{p.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Team */}
-      <section id="team" style={{ background: '#F8F9FA' }} className="px-8 py-20">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs font-medium uppercase tracking-widest mb-3" style={{ color: '#C9A84C' }}>The Builders</p>
-          <h2 className="text-2xl font-light mb-10" style={{ color: '#2C3E50' }}>Leadership</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+      <hr className="by-divider" style={{ margin: 0 }} />
+
+      {/* ── Team ── */}
+      <section id="team" style={{ background: "var(--by-gray)", padding: "6rem 2rem" }}>
+        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+          <p className="by-label mb-4">The Builders</p>
+          <h2 className="by-hero" style={{ marginBottom: "2.5rem" }}>Leadership</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mb-8">
             {team.map(m => (
-              <div key={m.name} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-                <div className="font-medium text-sm" style={{ color: '#2C3E50' }}>{m.name}</div>
-                <div className="text-xs text-gray-400 mt-1">{m.role}</div>
+              <div key={m.name} className="by-card p-4">
+                <p style={{ fontSize: "var(--by-small)", fontWeight: 500 }}>{m.name}</p>
+                <p style={{ fontSize: "0.75rem", color: "rgba(44,62,80,0.45)", marginTop: "0.2rem", fontWeight: 300 }}>{m.role}</p>
               </div>
             ))}
           </div>
-          <div className="rounded-xl p-8 border" style={{ background: '#2C3E50' }}>
-            <h3 className="font-medium text-white mb-1">Bonot Yisrael — <span style={{ color: '#C9A84C' }}>בונות ישראל</span></h3>
-            <p className="text-sm text-white/60 mb-5 font-light">Women's Division — family life, education, culture, and the social fabric that makes a community thrive.</p>
-            <div className="flex flex-wrap gap-3">
-              {bonot.map(m => (
-                <span key={m.name} className="rounded-full px-4 py-2 text-sm font-medium text-white border border-white/20">
-                  {m.name}
+
+          {/* Bonot Yisrael */}
+          <div className="by-card p-8" style={{ background: "var(--by-primary)", border: "none" }}>
+            <p className="by-label mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Women's Division</p>
+            <h3 style={{ fontSize: "var(--by-subheading)", fontWeight: 400, color: "white", marginBottom: "0.5rem" }}>
+              Bonot Yisrael <span style={{ color: "rgba(255,255,255,0.4)", fontWeight: 300 }}>בונות ישראל</span>
+            </h3>
+            <p style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.45)", marginBottom: "1.5rem", fontWeight: 300, maxWidth: "480px" }}>
+              Focused on family life, education, culture, and the social fabric that determines whether a community merely exists or actually thrives.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {bonot.map(name => (
+                <span key={name} style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "9999px", padding: "0.35rem 1rem", fontWeight: 300 }}>
+                  {name}
                 </span>
               ))}
             </div>
@@ -175,37 +177,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Leshem Shamayim */}
-      <section className="px-8 py-20 max-w-2xl mx-auto text-center">
-        <p className="text-xs font-medium uppercase tracking-widest mb-4" style={{ color: '#C9A84C' }}>Our Commitment</p>
-        <h2 className="text-2xl font-light mb-6" style={{ color: '#2C3E50' }}>Leshem Shamayim</h2>
-        <p className="text-gray-500 leading-relaxed font-light">
+      {/* ── Leshem Shamayim ── */}
+      <section className="flex flex-col items-center text-center px-8" style={{ padding: "6rem 2rem" }}>
+        <p className="by-label mb-4">Our Commitment</p>
+        <h2 className="by-hero" style={{ marginBottom: "1.5rem" }}>Leshem Shamayim</h2>
+        <p className="by-body" style={{ maxWidth: "480px", color: "rgba(44,62,80,0.6)", fontWeight: 300 }}>
           Our work is performed solely <em>leshem shamayim</em> — with pure spiritual intentions and without any financial incentives or personal gain. We are sounding the shofar — awakening hearts to return, to see, to believe.
         </p>
       </section>
 
-      {/* CTA */}
-      <section style={{ background: '#2C3E50' }} className="text-white text-center py-20 px-8">
-        <p className="text-xs font-medium uppercase tracking-widest mb-4" style={{ color: '#C9A84C' }}>The Question</p>
-        <h2 className="text-3xl font-light mb-5">Was Brooklyn Always the End Goal?</h2>
-        <p className="text-white/60 mb-10 max-w-md mx-auto font-light leading-relaxed">
+      {/* ── CTA ── */}
+      <section style={{ background: "var(--by-primary)", padding: "7rem 2rem", textAlign: "center" }}>
+        <p className="by-label mb-5" style={{ color: "rgba(255,255,255,0.3)" }}>The Question</p>
+        <h2 className="by-display" style={{ color: "white", marginBottom: "1.5rem" }}>
+          Was Brooklyn Always<br />the End Goal?
+        </h2>
+        <p className="by-body" style={{ color: "rgba(255,255,255,0.45)", maxWidth: "400px", margin: "0 auto 2.5rem", fontWeight: 300 }}>
           Communities that last are the ones that build — deliberately, patiently, and together.
         </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Link href="/signup"
-            className="rounded-full px-8 py-3 text-sm font-medium transition-colors"
-            style={{ background: '#C9A84C', color: '#2C3E50' }}>
+        <div className="flex gap-3 justify-center flex-wrap">
+          <Link href="/signup" className="by-btn-primary" style={{ background: "white", color: "var(--by-primary)" }}>
             Join the Movement
           </Link>
           <a href="https://instagram.com/bonei_yisrael" target="_blank" rel="noopener noreferrer"
-            className="rounded-full px-8 py-3 text-sm font-medium border border-white/30 text-white hover:bg-white/10 transition-colors">
+            className="by-btn-outline" style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.6)" }}>
             @bonei_yisrael
           </a>
         </div>
       </section>
 
-      <footer style={{ background: '#2C3E50', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="text-center py-6 text-xs text-white/30">
-        © {new Date().getFullYear()} Bonei Yisrael · בוני ישראל · Building the Future. In Our Land. Together.
+      <footer style={{ background: "var(--by-primary)", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "1.5rem 2rem", textAlign: "center" }}>
+        <p style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.2)", fontWeight: 300, letterSpacing: "0.02em" }}>
+          © {new Date().getFullYear()} Bonei Yisrael · בוני ישראל · Building the Future. In Our Land. Together.
+        </p>
       </footer>
     </div>
   );

@@ -21,40 +21,41 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-blue-900">Shalom! 👋</h1>
-        <p className="text-gray-500 text-sm mt-1">{user?.email} · Bonei Yisrael Admin</p>
+      <div style={{ marginBottom: '2.5rem' }}>
+        <p className="by-label" style={{ marginBottom: '0.5rem' }}>Dashboard</p>
+        <h1 style={{ fontSize: 'var(--by-hero)', fontWeight: 300, letterSpacing: '-0.015em' }}>Shalom 👋</h1>
+        <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginTop: '0.25rem', fontWeight: 300 }}>{user?.email} · Bonei Yisrael</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {stats.map(s => (
-          <Link key={s.label} href={s.href}
-            className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all">
-            <div className="text-3xl mb-3">{s.icon}</div>
-            <div className="text-2xl font-bold text-blue-900">{s.value}</div>
-            <div className="text-sm font-medium text-gray-700">{s.label}</div>
-            <div className="text-xs text-gray-400 mt-1">{s.sub}</div>
+          <Link key={s.label} href={s.href} className="by-card" style={{ padding: '1.5rem', textDecoration: 'none' }}>
+            <div style={{ fontSize: '1.75rem', marginBottom: '1rem' }}>{s.icon}</div>
+            <div style={{ fontSize: 'var(--by-heading)', fontWeight: 500, letterSpacing: '-0.01em' }}>{s.value}</div>
+            <div style={{ fontSize: 'var(--by-small)', fontWeight: 500, marginTop: '0.25rem' }}>{s.label}</div>
+            <div style={{ fontSize: '0.75rem', color: 'rgba(44,62,80,0.4)', marginTop: '0.25rem', fontWeight: 300 }}>{s.sub}</div>
           </Link>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="font-bold text-blue-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="by-card" style={{ padding: '1.75rem' }}>
+          <h2 style={{ fontSize: 'var(--by-body)', fontWeight: 500, marginBottom: '1.25rem' }}>Quick Actions</h2>
+          <div className="grid grid-cols-2 gap-2">
             {quickActions.map(a => (
-              <Link key={a.label} href={a.href}
-                className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-colors">
-                <span className="text-xl">{a.icon}</span>
-                <span className="text-sm font-medium text-blue-900">{a.label}</span>
+              <Link key={a.label} href={a.href} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid rgba(44,62,80,0.08)', textDecoration: 'none', transition: 'background 0.2s' }}
+                onMouseOver={e => (e.currentTarget.style.background = 'rgba(44,62,80,0.04)')}
+                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}>
+                <span style={{ fontSize: '1.1rem' }}>{a.icon}</span>
+                <span style={{ fontSize: 'var(--by-small)', fontWeight: 500 }}>{a.label}</span>
               </Link>
             ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="font-bold text-blue-900 mb-4">Our Five Pillars</h2>
-          <div className="flex flex-col gap-2">
+        <div className="by-card" style={{ padding: '1.75rem' }}>
+          <h2 style={{ fontSize: 'var(--by-body)', fontWeight: 500, marginBottom: '1.25rem' }}>Five Pillars</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
               { label: 'Community', hebrew: 'קהילה', icon: '🏘️' },
               { label: 'Schools', hebrew: 'חינוך', icon: '📚' },
@@ -62,10 +63,10 @@ export default async function DashboardPage() {
               { label: 'Safety', hebrew: 'ביטחון', icon: '🛡️' },
               { label: 'Opportunity', hebrew: 'הזדמנות', icon: '💼' },
             ].map(p => (
-              <div key={p.label} className="flex items-center gap-3 py-1.5">
-                <span className="text-lg">{p.icon}</span>
-                <span className="text-sm font-medium text-gray-800">{p.label}</span>
-                <span className="text-sm text-gray-400 mr-auto">{p.hebrew}</span>
+              <div key={p.label} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.4rem 0' }}>
+                <span style={{ fontSize: '1.1rem' }}>{p.icon}</span>
+                <span style={{ fontSize: 'var(--by-small)', fontWeight: 500 }}>{p.label}</span>
+                <span style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.35)', fontWeight: 300 }}>{p.hebrew}</span>
               </div>
             ))}
           </div>

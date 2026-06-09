@@ -56,14 +56,14 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-950 to-blue-800 px-4">
-        <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="text-5xl mb-4">✉️</div>
-          <h2 className="text-xl font-bold text-blue-900 mb-2">Check your email</h2>
-          <p className="text-gray-500 text-sm mb-6">
-            We sent a confirmation link to <strong>{form.email}</strong>. Click it to activate your account.
+      <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+        <div className="by-card" style={{ padding: '3rem', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1.25rem' }}>✉️</div>
+          <h2 style={{ fontSize: 'var(--by-heading)', fontWeight: 500, marginBottom: '0.75rem' }}>Check your email</h2>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.55)', marginBottom: '2rem', fontWeight: 300 }}>
+            We sent a confirmation link to <strong style={{ fontWeight: 500 }}>{form.email}</strong>. Click it to activate your account.
           </p>
-          <Link href="/login" className="rounded-full bg-blue-900 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 transition-colors">
+          <Link href="/login" className="by-btn-primary" style={{ justifyContent: 'center', width: '100%' }}>
             Back to Login
           </Link>
         </div>
@@ -72,75 +72,73 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-950 to-blue-800 px-4 py-12">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-blue-900">Join Bonei Yisrael</h1>
-          <p className="text-blue-600 text-sm">בוני ישראל · Building the Future Together</p>
+    <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: '440px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <p style={{ fontSize: 'var(--by-subheading)', fontWeight: 300, color: 'white', letterSpacing: '-0.01em' }}>Bonei Yisrael</p>
+            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.3)', marginTop: '0.25rem' }}>בוני ישראל</p>
+          </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-3">
+        <div className="by-card" style={{ padding: '2.5rem' }}>
+          <h1 style={{ fontSize: 'var(--by-heading)', fontWeight: 500, marginBottom: '0.4rem' }}>Join Bonei Yisrael</h1>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginBottom: '2rem', fontWeight: 300 }}>Building the future in Eretz Yisrael</p>
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              <div>
+                <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>First Name</label>
+                <input className="by-input" name="firstName" value={form.firstName} onChange={handleChange} required placeholder="Saul" />
+              </div>
+              <div>
+                <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Last Name</label>
+                <input className="by-input" name="lastName" value={form.lastName} onChange={handleChange} required placeholder="Ancona" />
+              </div>
+            </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-              <input name="firstName" value={form.firstName} onChange={handleChange} required
-                className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Saul" />
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Email</label>
+              <input className="by-input" name="email" type="email" value={form.email} onChange={handleChange} required placeholder="you@example.com" />
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-              <input name="lastName" value={form.lastName} onChange={handleChange} required
-                className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Ancona" />
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>
+                Phone <span style={{ color: 'rgba(44,62,80,0.3)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span>
+              </label>
+              <input className="by-input" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="(718) 555-0100" />
             </div>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input name="email" type="email" value={form.email} onChange={handleChange} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="you@example.com" />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone <span className="text-gray-400 font-normal">(optional)</span></label>
-            <input name="phone" type="tel" value={form.phone} onChange={handleChange}
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="(718) 555-0100" />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input name="password" type="password" value={form.password} onChange={handleChange} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="At least 8 characters" />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-            <input name="confirm" type="password" value={form.confirm} onChange={handleChange} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="••••••••" />
-          </div>
-
-          {error && (
-            <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 text-sm text-red-600">
-              {error}
+            <div>
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Password</label>
+              <input className="by-input" name="password" type="password" value={form.password} onChange={handleChange} required placeholder="At least 8 characters" />
             </div>
-          )}
 
-          <button type="submit" disabled={loading}
-            className="rounded-full bg-blue-900 py-3 text-sm font-semibold text-white hover:bg-blue-800 transition-colors disabled:opacity-50 mt-2">
-            {loading ? 'Creating account…' : 'Create Account'}
-          </button>
+            <div>
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Confirm Password</label>
+              <input className="by-input" name="confirm" type="password" value={form.confirm} onChange={handleChange} required placeholder="••••••••" />
+            </div>
 
-          <p className="text-center text-sm text-gray-500">
-            Already have an account?{' '}
-            <Link href="/login" className="text-blue-700 font-medium hover:underline">Sign in</Link>
-          </p>
-        </form>
+            {error && (
+              <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.15)', borderRadius: '0.5rem', padding: '0.75rem 1rem' }}>
+                <p style={{ fontSize: 'var(--by-small)', color: '#dc2626' }}>{error}</p>
+              </div>
+            )}
+
+            <button type="submit" className="by-btn-primary" disabled={loading}
+              style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', opacity: loading ? 0.6 : 1 }}>
+              {loading ? 'Creating account…' : 'Create Account'}
+            </button>
+          </form>
+        </div>
+
+        <p style={{ textAlign: 'center', fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.35)', marginTop: '1.5rem', fontWeight: 300 }}>
+          Already have an account?{' '}
+          <Link href="/login" style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: '3px' }}>Sign in</Link>
+          {' · '}
+          <Link href="/" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'underline', textUnderlineOffset: '3px' }}>Home</Link>
+        </p>
       </div>
-      <Link href="/" className="mt-6 text-blue-200 text-sm hover:text-white">← Back to home</Link>
     </div>
   )
 }

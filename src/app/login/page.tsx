@@ -28,39 +28,54 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ background: '#2C3E50' }}>
-      <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-light" style={{ color: '#2C3E50' }}>Bonei Yisrael</h1>
-          <p className="text-sm mt-1" style={{ color: '#C9A84C' }}>בוני ישראל</p>
+    <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ width: '100%', maxWidth: '380px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <p style={{ fontSize: 'var(--by-subheading)', fontWeight: 300, color: 'white', letterSpacing: '-0.01em' }}>Bonei Yisrael</p>
+            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.3)', marginTop: '0.25rem' }}>בוני ישראל</p>
+          </Link>
         </div>
-        <form onSubmit={handleLogin} className="flex flex-col gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#2C3E50' }}>Email</label>
-            <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
-              style={{ '--tw-ring-color': '#2C3E50' } as any}
-              placeholder="you@example.com" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#2C3E50' }}>Password</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2"
-              placeholder="••••••••" />
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" disabled={loading}
-            className="rounded-full py-3 text-sm font-medium text-white transition-colors disabled:opacity-50 mt-2"
-            style={{ background: '#2C3E50' }}>
-            {loading ? 'Signing in…' : 'Sign In'}
-          </button>
-          <p className="text-center text-sm text-gray-400">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="font-medium hover:underline" style={{ color: '#2C3E50' }}>Join us</Link>
-          </p>
-        </form>
+
+        <div className="by-card" style={{ padding: '2.5rem' }}>
+          <h1 style={{ fontSize: 'var(--by-heading)', fontWeight: 500, marginBottom: '0.4rem' }}>Welcome back</h1>
+          <p style={{ fontSize: 'var(--by-small)', color: 'rgba(44,62,80,0.45)', marginBottom: '2rem', fontWeight: 300 }}>Sign in to your member account</p>
+
+          {error && (
+            <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.15)', borderRadius: '0.5rem', padding: '0.75rem 1rem', marginBottom: '1.25rem' }}>
+              <p style={{ fontSize: 'var(--by-small)', color: '#dc2626' }}>{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div>
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Email</label>
+              <input className="by-input" type="email" value={email} onChange={e => setEmail(e.target.value)}
+                placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Password</label>
+              <input className="by-input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••" required />
+            </div>
+            <button type="submit" className="by-btn-primary" disabled={loading}
+              style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem', opacity: loading ? 0.6 : 1 }}>
+              {loading ? 'Signing in…' : 'Sign In'}
+            </button>
+          </form>
+        </div>
+
+        <p style={{ textAlign: 'center', fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.35)', marginTop: '1.5rem', fontWeight: 300 }}>
+          Not a member yet?{' '}
+          <Link href="/signup" style={{ color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            Join us
+          </Link>
+          {' · '}
+          <Link href="/" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
+            Home
+          </Link>
+        </p>
       </div>
-      <Link href="/" className="mt-6 text-sm text-white/40 hover:text-white/70 transition-colors">← Back to home</Link>
     </div>
   )
 }
