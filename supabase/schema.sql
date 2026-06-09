@@ -1,3 +1,8 @@
+-- ============================================================
+-- Bonei Yisrael — Database Schema
+-- Run this in: supabase.com → your project → SQL Editor
+-- ============================================================
+
 -- PROFILES (extends auth.users)
 create table if not exists profiles (
   id uuid references auth.users on delete cascade primary key,
@@ -8,7 +13,7 @@ create table if not exists profiles (
   family_size int,
   address text,
   status text default 'Exploring', -- Exploring, Interested, Committed
-  role text default 'member', -- member, admin
+  role text default 'member',       -- member, admin
   notes text,
   created_at timestamptz default now()
 );
@@ -24,12 +29,14 @@ begin
     new.raw_user_meta_data->>'last_name',
     new.raw_user_meta_data->>'full_name',
     new.raw_user_meta_data->>'phone'
-  );
+  )
+  on conflict (id) do nothing;
   return new;
 end;
 $$ language plpgsql security definer;
 
-create or replace trigger on_auth_user_created
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
@@ -62,7 +69,7 @@ create table if not exists communications (
   title text not null,
   type text default 'Announcement', -- Announcement, Newsletter
   body text,
-  status text default 'Draft', -- Draft, Sent
+  status text default 'Draft',      -- Draft, Sent
   sent_at timestamptz,
   created_by uuid references profiles(id),
   created_at timestamptz default now()
@@ -102,42 +109,6 @@ create table if not exists forum_replies (
   created_at timestamptz default now()
 );
 
--- ROW LEVEL SECURITY
-alter table profiles enable row level security;
-alter table events enable row level security;
-alter table event_registrations enable row level security;
-alter table communications enable row level security;
-alter table donations enable row level security;
-alter table forum_threads enable row level security;
-alter table forum_replies enable row level security;
-
--- Policies: logged-in users can read everything
-create policy "Members can read profiles" on profiles for select using (auth.role() = 'authenticated');
-create policy "Users can update own profile" on profiles for update using (auth.uid() = id);
-
-create policy "Members can read events" on events for select using (auth.role() = 'authenticated');
-create policy "Admins can insert events" on events for insert with check (auth.role() = 'authenticated');
-create policy "Admins can update events" on events for update using (auth.role() = 'authenticated');
-
-create policy "Members can read registrations" on event_registrations for select using (auth.role() = 'authenticated');
-create policy "Members can register" on event_registrations for insert with check (auth.uid() = user_id);
-create policy "Members can unregister" on event_registrations for delete using (auth.uid() = user_id);
-
-create policy "Members can read comms" on communications for select using (auth.role() = 'authenticated');
-create policy "Admins can manage comms" on communications for insert with check (auth.role() = 'authenticated');
-
-create policy "Members can read donations" on donations for select using (auth.role() = 'authenticated');
-create policy "Admins can manage donations" on donations for insert with check (auth.role() = 'authenticated');
-
-create policy "Members can read threads" on forum_threads for select using (auth.role() = 'authenticated');
-create policy "Members can post threads" on forum_threads for insert with check (auth.uid() = author_id);
-create policy "Authors can update threads" on forum_threads for update using (auth.uid() = author_id);
-
-create policy "Members can read replies" on forum_replies for select using (auth.role() = 'authenticated');
-create policy "Members can post replies" on forum_replies for insert with check (auth.uid() = author_id);
-create policy "Authors can update replies" on forum_replies for update using (auth.uid() = author_id);
-create policy "Authors can delete replies" on forum_replies for delete using (auth.uid() = author_id);
-
 -- CHAT CHANNELS
 create table if not exists chat_channels (
   id uuid default gen_random_uuid() primary key,
@@ -148,11 +119,11 @@ create table if not exists chat_channels (
 
 -- Seed default channels
 insert into chat_channels (name, description) values
-  ('general', 'General community chat'),
-  ('aliyah', 'Aliyah planning and tips'),
-  ('schools', 'Schools and education'),
-  ('housing', 'Housing and neighborhoods'),
-  ('matobu', 'Matobu project updates')
+  ('general',  'General community chat'),
+  ('aliyah',   'Aliyah planning and tips'),
+  ('schools',  'Schools and education'),
+  ('housing',  'Housing and neighborhoods'),
+  ('matobu',   'Matobu project updates')
 on conflict (name) do nothing;
 
 -- CHAT MESSAGES
@@ -164,10 +135,64 @@ create table if not exists chat_messages (
   created_at timestamptz default now()
 );
 
+-- ── Row Level Security ────────────────────────────────────────
+
+alter table profiles enable row level security;
+alter table events enable row level security;
+alter table event_registrations enable row level security;
+alter table communications enable row level security;
+alter table donations enable row level security;
+alter table forum_threads enable row level security;
+alter table forum_replies enable row level security;
 alter table chat_channels enable row level security;
 alter table chat_messages enable row level security;
 
-create policy "Members can read channels" on chat_channels for select using (auth.role() = 'authenticated');
-create policy "Members can read messages" on chat_messages for select using (auth.role() = 'authenticated');
-create policy "Members can send messages" on chat_messages for insert with check (auth.uid() = author_id);
+-- Profiles
+create policy "Members can read profiles"   on profiles for select using (auth.role() = 'authenticated');
+create policy "Users can insert own profile" on profiles for insert with check (auth.uid() = id);
+create policy "Users can update own profile" on profiles for update using (auth.role() = 'authenticated');
+
+-- Events
+create policy "Members can read events"    on events for select using (auth.role() = 'authenticated');
+create policy "Members can insert events"  on events for insert with check (auth.role() = 'authenticated');
+create policy "Members can update events"  on events for update using (auth.role() = 'authenticated');
+create policy "Members can delete events"  on events for delete using (auth.role() = 'authenticated');
+
+-- Event registrations
+create policy "Members can read registrations"  on event_registrations for select using (auth.role() = 'authenticated');
+create policy "Members can register"            on event_registrations for insert with check (auth.uid() = user_id);
+create policy "Members can unregister"          on event_registrations for delete using (auth.uid() = user_id);
+
+-- Communications
+create policy "Members can read comms"    on communications for select using (auth.role() = 'authenticated');
+create policy "Members can manage comms"  on communications for insert with check (auth.role() = 'authenticated');
+create policy "Members can update comms"  on communications for update using (auth.role() = 'authenticated');
+
+-- Donations
+create policy "Members can read donations"    on donations for select using (auth.role() = 'authenticated');
+create policy "Members can manage donations"  on donations for insert with check (auth.role() = 'authenticated');
+
+-- Forum threads
+create policy "Members can read threads"    on forum_threads for select using (auth.role() = 'authenticated');
+create policy "Members can post threads"    on forum_threads for insert with check (auth.uid() = author_id);
+create policy "Authors can update threads"  on forum_threads for update using (auth.uid() = author_id);
+create policy "Authors can delete threads"  on forum_threads for delete using (auth.uid() = author_id);
+
+-- Forum replies
+create policy "Members can read replies"    on forum_replies for select using (auth.role() = 'authenticated');
+create policy "Members can post replies"    on forum_replies for insert with check (auth.uid() = author_id);
+create policy "Authors can update replies"  on forum_replies for update using (auth.uid() = author_id);
+create policy "Authors can delete replies"  on forum_replies for delete using (auth.uid() = author_id);
+
+-- Chat channels
+create policy "Members can read channels"  on chat_channels for select using (auth.role() = 'authenticated');
+
+-- Chat messages
+create policy "Members can read messages"   on chat_messages for select using (auth.role() = 'authenticated');
+create policy "Members can send messages"   on chat_messages for insert with check (auth.uid() = author_id);
 create policy "Authors can delete messages" on chat_messages for delete using (auth.uid() = author_id);
+
+-- ── Realtime ──────────────────────────────────────────────────
+-- Enables live updates for chat and forum
+alter publication supabase_realtime add table chat_messages;
+alter publication supabase_realtime add table forum_replies;

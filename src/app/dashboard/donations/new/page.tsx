@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
 export default function NewDonationPage() {
@@ -10,14 +11,30 @@ export default function NewDonationPage() {
     donor: '', email: '', amount: '', campaign: 'General Fund',
     date: new Date().toISOString().split('T')[0], anonymous: false, notes: '',
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const target = e.target as HTMLInputElement
     setForm(f => ({ ...f, [target.name]: target.type === 'checkbox' ? target.checked : target.value }))
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setLoading(true); setError('')
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    const { error } = await supabase.from('donations').insert({
+      donor_name: form.anonymous ? null : (form.donor || null),
+      donor_email: form.anonymous ? null : (form.email || null),
+      amount: parseFloat(form.amount),
+      campaign: form.campaign,
+      date: form.date,
+      anonymous: form.anonymous,
+      notes: form.notes || null,
+      created_by: user?.id ?? null,
+    })
+    if (error) { setError(error.message); setLoading(false); return }
     router.push('/dashboard/donations')
   }
 
@@ -32,6 +49,7 @@ export default function NewDonationPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="by-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        {error && <div style={{ background: '#fff0f0', border: '1px solid #ffcccc', borderRadius: '0.5rem', padding: '0.75rem 1rem', fontSize: 'var(--by-small)', color: '#c0392b' }}>{error}</div>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div>
             <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Donor Name</label>
@@ -80,7 +98,7 @@ export default function NewDonationPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '0.5rem' }}>
-          <button type="submit" className="by-btn-primary">Save Donation</button>
+          <button type="submit" className="by-btn-primary" disabled={loading} style={{ opacity: loading ? 0.6 : 1 }}>{loading ? 'Saving…' : 'Save Donation'}</button>
           <Link href="/dashboard/donations" className="by-btn-outline">Cancel</Link>
         </div>
       </form>

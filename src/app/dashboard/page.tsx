@@ -1,22 +1,39 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+import QuickActions from '@/components/QuickActions'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const stats = [
-    { label: 'Total Members', value: '5', sub: '3 committed', icon: '👥', href: '/dashboard/members' },
-    { label: 'Upcoming Events', value: '3', sub: 'Next: Jun 15', icon: '📅', href: '/dashboard/events' },
-    { label: 'Messages Sent', value: '5', sub: '1 draft', icon: '📢', href: '/dashboard/communications' },
-    { label: 'Total Raised', value: '$19,800', sub: 'Across 4 campaigns', icon: '💛', href: '/dashboard/donations' },
-  ]
+  const today = new Date().toISOString().split('T')[0]
 
-  const quickActions = [
-    { label: 'Add Member', href: '/dashboard/members/new', icon: '➕' },
-    { label: 'Create Event', href: '/dashboard/events/new', icon: '📅' },
-    { label: 'Send Message', href: '/dashboard/communications/new', icon: '📢' },
-    { label: 'Record Donation', href: '/dashboard/donations/new', icon: '💛' },
+  const [
+    { count: memberCount },
+    { count: upcomingCount },
+    { data: nextEvent },
+    { count: sentCount },
+    { count: draftCount },
+    { data: donationData },
+  ] = await Promise.all([
+    supabase.from('members').select('*', { count: 'exact', head: true }),
+    supabase.from('events').select('*', { count: 'exact', head: true }).gte('date', today),
+    supabase.from('events').select('title,date').gte('date', today).order('date', { ascending: true }).limit(1),
+    supabase.from('communications').select('*', { count: 'exact', head: true }).eq('status', 'Sent'),
+    supabase.from('communications').select('*', { count: 'exact', head: true }).eq('status', 'Draft'),
+    supabase.from('donations').select('amount'),
+  ])
+
+  const totalRaised = (donationData ?? []).reduce((s, d) => s + Number(d.amount), 0)
+  const nextEventLabel = nextEvent?.[0]
+    ? new Date(nextEvent[0].date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    : null
+
+  const stats = [
+    { label: 'Total Members', value: String(memberCount ?? 0), sub: 'in the community', icon: '👥', href: '/dashboard/members' },
+    { label: 'Upcoming Events', value: String(upcomingCount ?? 0), sub: nextEventLabel ? `Next: ${nextEventLabel}` : 'None scheduled', icon: '📅', href: '/dashboard/events' },
+    { label: 'Messages Sent', value: String(sentCount ?? 0), sub: `${draftCount ?? 0} draft${draftCount !== 1 ? 's' : ''}`, icon: '📢', href: '/dashboard/communications' },
+    { label: 'Total Raised', value: `$${totalRaised.toLocaleString()}`, sub: 'across all campaigns', icon: '💛', href: '/dashboard/donations' },
   ]
 
   return (
@@ -41,16 +58,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="by-card" style={{ padding: '1.75rem' }}>
           <h2 style={{ fontSize: 'var(--by-body)', fontWeight: 500, marginBottom: '1.25rem' }}>Quick Actions</h2>
-          <div className="grid grid-cols-2 gap-2">
-            {quickActions.map(a => (
-              <Link key={a.label} href={a.href} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid rgba(44,62,80,0.08)', textDecoration: 'none', transition: 'background 0.2s' }}
-                onMouseOver={e => (e.currentTarget.style.background = 'rgba(44,62,80,0.04)')}
-                onMouseOut={e => (e.currentTarget.style.background = 'transparent')}>
-                <span style={{ fontSize: '1.1rem' }}>{a.icon}</span>
-                <span style={{ fontSize: 'var(--by-small)', fontWeight: 500 }}>{a.label}</span>
-              </Link>
-            ))}
-          </div>
+          <QuickActions />
         </div>
 
         <div className="by-card" style={{ padding: '1.75rem' }}>

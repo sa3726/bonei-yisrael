@@ -10,7 +10,7 @@ const statusColors: Record<string, string> = {
 export default async function MembersPage() {
   const supabase = await createClient()
   const { data: members } = await supabase
-    .from('profiles')
+    .from('members')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -55,7 +55,7 @@ export default async function MembersPage() {
                   {m.full_name || `${m.first_name ?? ''} ${m.last_name ?? ''}`.trim() || '—'}
                 </td>
                 <td style={{ padding: '1rem 1.5rem', color: 'rgba(44,62,80,0.5)', fontWeight: 300 }}>
-                  <div style={{ fontSize: '0.7rem', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }}>{m.id}</div>
+                  <div style={{ fontSize: '0.75rem' }}>{m.email ?? '—'}</div>
                   <div style={{ fontSize: '0.75rem', marginTop: '0.15rem' }}>{m.phone ?? '—'}</div>
                 </td>
                 <td style={{ padding: '1rem 1.5rem', color: 'rgba(44,62,80,0.55)', fontWeight: 300 }}>{m.family_size ? `${m.family_size}` : '—'}</td>

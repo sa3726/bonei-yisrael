@@ -2,26 +2,46 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
 export default function NewCommunicationPage() {
   const router = useRouter()
   const [form, setForm] = useState({ title: '', type: 'Announcement', body: '' })
   const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }))
   }
 
-  function handleSaveDraft(e: React.MouseEvent) {
-    e.preventDefault()
-    router.push('/dashboard/communications')
+  async function save(status: 'Draft' | 'Sent') {
+    setError('')
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    const { error } = await supabase.from('communications').insert({
+      title: form.title,
+      type: form.type,
+      body: form.body || null,
+      status,
+      sent_at: status === 'Sent' ? new Date().toISOString() : null,
+      created_by: user?.id ?? null,
+    })
+    if (error) { setError(error.message); return false }
+    return true
   }
 
-  function handleSend(e: React.MouseEvent) {
+  async function handleSaveDraft(e: React.MouseEvent) {
+    e.preventDefault()
+    if (!form.title) return
+    if (await save('Draft')) router.push('/dashboard/communications')
+  }
+
+  async function handleSend(e: React.MouseEvent) {
     e.preventDefault()
     setSending(true)
-    setTimeout(() => router.push('/dashboard/communications'), 1000)
+    if (await save('Sent')) router.push('/dashboard/communications')
+    else setSending(false)
   }
 
   return (
@@ -35,6 +55,8 @@ export default function NewCommunicationPage() {
       </div>
 
       <form className="by-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        {error && <div style={{ background: '#fff0f0', border: '1px solid #ffcccc', borderRadius: '0.5rem', padding: '0.75rem 1rem', fontSize: 'var(--by-small)', color: '#c0392b' }}>{error}</div>}
+
         <div>
           <label className="by-label" style={{ display: 'block', marginBottom: '0.4rem' }}>Subject / Title</label>
           <input name="title" value={form.title} onChange={handleChange} required

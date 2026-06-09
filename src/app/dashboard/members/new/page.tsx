@@ -22,13 +22,15 @@ export default function NewMemberPage() {
     e.preventDefault()
     setLoading(true); setError('')
     const supabase = createClient()
-    const { error } = await supabase.from('profiles').upsert({
-      full_name: `${form.firstName} ${form.lastName}`.trim(),
-      first_name: form.firstName,
-      last_name: form.lastName,
+    const { error } = await supabase.from('members').insert({
+      first_name: form.firstName || null,
+      last_name: form.lastName || null,
+      email: form.email || null,
       phone: form.phone || null,
       family_size: form.familySize ? parseInt(form.familySize) : null,
+      address: form.address || null,
       status: form.status,
+      notes: form.notes || null,
     })
     if (error) { setError(error.message); setLoading(false); return }
     router.push('/dashboard/members')
