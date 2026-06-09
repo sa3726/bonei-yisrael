@@ -8,6 +8,7 @@ const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
   { label: 'Members', href: '/dashboard/members', icon: '👥' },
   { label: 'Events', href: '/dashboard/events', icon: '📅' },
+  { label: 'Forum', href: '/dashboard/forum', icon: '💬' },
   { label: 'Communications', href: '/dashboard/communications', icon: '📢' },
   { label: 'Donations', href: '/dashboard/donations', icon: '💛' },
 ]
