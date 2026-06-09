@@ -79,7 +79,7 @@ export default function Home() {
         </p>
         <div className="flex gap-4 flex-wrap justify-center">
           <Link
-            href="/login"
+            href="/signup"
             className="rounded-full bg-yellow-400 px-8 py-3 font-semibold text-blue-950 hover:bg-yellow-300 transition-colors"
           >
             Join the Movement
@@ -187,7 +187,7 @@ export default function Home() {
         <p className="text-blue-200 mb-8 max-w-md mx-auto">Communities that last are the ones that build — deliberately, patiently, and together. Be part of what's being built.</p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link
-            href="/login"
+            href="/signup"
             className="rounded-full bg-yellow-400 px-8 py-3 font-semibold text-blue-950 hover:bg-yellow-300 transition-colors"
           >
             Join the Movement
