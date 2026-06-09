@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import BoneiLogo from '@/components/BoneiLogo'
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
@@ -27,9 +28,8 @@ export default function DashboardNav({ user }: { user: { email?: string } }) {
 
   return (
     <aside className="w-56 flex flex-col min-h-screen shrink-0" style={{ background: '#2C3E50' }}>
-      <div className="px-6 py-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-        <div className="font-medium text-white text-base tracking-wide">Bonei Yisrael</div>
-        <div className="text-xs mt-0.5" style={{ color: '#C9A84C' }}>בוני ישראל</div>
+      <div className="px-5 py-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <BoneiLogo variant="light" size="sm" href="/dashboard" />
       </div>
       <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5">
         {navItems.map(item => {

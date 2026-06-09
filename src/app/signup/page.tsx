@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import BoneiLogo from '@/components/BoneiLogo'
 
 export default function SignupPage() {
   const [form, setForm] = useState({
@@ -33,7 +34,7 @@ export default function SignupPage() {
     }
 
     setLoading(true)
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
@@ -47,16 +48,27 @@ export default function SignupPage() {
     })
 
     if (error) {
-      setError(error.message)
+      // Friendly message for rate limit
+      if (error.message.toLowerCase().includes('rate limit') || error.message.toLowerCase().includes('email rate')) {
+        setError('Too many signups right now. Please try again in a few minutes, or contact Saul directly to be added.')
+      } else {
+        setError(error.message)
+      }
       setLoading(false)
+    } else if (data.session) {
+      // Email confirmation is OFF — user is logged in immediately
+      router.push('/dashboard')
+      router.refresh()
     } else {
+      // Email confirmation is ON — show check-your-email screen
       setSuccess(true)
     }
   }
 
   if (success) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+        <div style={{ marginBottom: '2rem' }}><BoneiLogo variant="light" size="md" href="/" /></div>
         <div className="by-card" style={{ padding: '3rem', maxWidth: '380px', width: '100%', textAlign: 'center' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1.25rem' }}>✉️</div>
           <h2 style={{ fontSize: 'var(--by-heading)', fontWeight: 500, marginBottom: '0.75rem' }}>Check your email</h2>
@@ -74,11 +86,8 @@ export default function SignupPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <p style={{ fontSize: 'var(--by-subheading)', fontWeight: 300, color: 'white', letterSpacing: '-0.01em' }}>Bonei Yisrael</p>
-            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.3)', marginTop: '0.25rem' }}>בוני ישראל</p>
-          </Link>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem', display: 'flex', justifyContent: 'center' }}>
+          <BoneiLogo variant="light" size="md" href="/" />
         </div>
 
         <div className="by-card" style={{ padding: '2.5rem' }}>

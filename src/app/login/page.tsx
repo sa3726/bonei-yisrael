@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import BoneiLogo from '@/components/BoneiLogo'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -30,11 +31,8 @@ export default function LoginPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--by-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div style={{ width: '100%', maxWidth: '380px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <Link href="/" style={{ textDecoration: 'none' }}>
-            <p style={{ fontSize: 'var(--by-subheading)', fontWeight: 300, color: 'white', letterSpacing: '-0.01em' }}>Bonei Yisrael</p>
-            <p style={{ fontSize: 'var(--by-small)', color: 'rgba(255,255,255,0.3)', marginTop: '0.25rem' }}>בוני ישראל</p>
-          </Link>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem', display: 'flex', justifyContent: 'center' }}>
+          <BoneiLogo variant="light" size="md" href="/" />
         </div>
 
         <div className="by-card" style={{ padding: '2.5rem' }}>

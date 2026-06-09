@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BoneiLogo from "@/components/BoneiLogo";
 
 const pillars = [
   { icon: "🏘️", title: "Community", hebrew: "קהילה", desc: "Building lasting social bonds" },
@@ -44,8 +45,7 @@ export default function Home() {
       {/* ── Nav ── */}
       <nav style={{ background: "var(--by-primary)" }} className="flex items-center justify-between px-8 py-5">
         <div className="flex items-center gap-3">
-          <span style={{ fontSize: "var(--by-subheading)", fontWeight: 300, color: "white", letterSpacing: "-0.01em" }}>Bonei Yisrael</span>
-          <span style={{ fontSize: "var(--by-small)", color: "rgba(255,255,255,0.4)" }}>בוני ישראל</span>
+          <BoneiLogo variant="light" size="sm" href="/" />
         </div>
         <div className="flex items-center gap-6">
           {["#projects", "#team"].map((href, i) => (
@@ -61,6 +61,9 @@ export default function Home() {
       {/* ── Hero ── */}
       <section style={{ background: "var(--by-primary)", paddingTop: "7rem", paddingBottom: "7rem" }}
         className="flex flex-col items-center text-center px-8">
+        <div style={{ marginBottom: "2.5rem" }}>
+          <BoneiLogo variant="light" size="lg" />
+        </div>
         <p className="by-label mb-6" style={{ color: "rgba(255,255,255,0.35)" }}>Home · Heritage · Future</p>
         <h1 className="by-display" style={{ color: "white", maxWidth: "640px", lineHeight: 1.1 }}>
           Building the Future.<br />In Our Land. Together.
