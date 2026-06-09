@@ -26,34 +26,34 @@ export default function DashboardNav({ user }: { user: { email?: string } }) {
   }
 
   return (
-    <aside className="w-60 bg-blue-950 text-white flex flex-col min-h-screen">
-      <div className="px-6 py-6 border-b border-blue-900">
-        <div className="font-bold text-lg">Bonei Yisrael</div>
-        <div className="text-blue-400 text-xs">בוני ישראל</div>
+    <aside className="w-56 flex flex-col min-h-screen shrink-0" style={{ background: '#2C3E50' }}>
+      <div className="px-6 py-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="font-medium text-white text-base tracking-wide">Bonei Yisrael</div>
+        <div className="text-xs mt-0.5" style={{ color: '#C9A84C' }}>בוני ישראל</div>
       </div>
-      <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+      <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5">
         {navItems.map(item => {
           const active = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                active ? 'bg-blue-800 text-white' : 'text-blue-300 hover:bg-blue-900 hover:text-white'
-              }`}
-            >
-              <span>{item.icon}</span>
+            <Link key={item.href} href={item.href}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors"
+              style={{
+                background: active ? 'rgba(255,255,255,0.1)' : 'transparent',
+                color: active ? '#ffffff' : 'rgba(255,255,255,0.5)',
+              }}>
+              <span className="text-base">{item.icon}</span>
               {item.label}
             </Link>
           )
         })}
       </nav>
-      <div className="px-6 py-4 border-t border-blue-900">
-        <p className="text-blue-400 text-xs truncate mb-2">{user.email}</p>
-        <button
-          onClick={handleSignOut}
-          className="text-sm text-blue-300 hover:text-white transition-colors"
-        >
+      <div className="px-6 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <p className="text-xs truncate mb-2" style={{ color: 'rgba(255,255,255,0.3)' }}>{user.email}</p>
+        <button onClick={handleSignOut}
+          className="text-sm transition-colors"
+          style={{ color: 'rgba(255,255,255,0.4)' }}
+          onMouseOver={e => (e.currentTarget.style.color = 'white')}
+          onMouseOut={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.4)')}>
           Sign out
         </button>
       </div>
